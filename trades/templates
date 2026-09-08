@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Barter Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tag { display: inline-block; padding: 4px 8px; background: #007bff; color: white; border-radius: 4px; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+    <h1>Available Service Trades</h1>
+    
+    {% for service in services %}
+        <div class="card">
+            <h2>{{ service.title }}</h2>
+            <span class="tag">{{ service.get_category_display }}</span>
+            <p><strong>Posted by:</strong> {{ service.user.username }}</p>
+            <p>{{ service.description }}</p>
+            <p><strong>Looking for in exchange:</strong> {{ service.barter_target }}</p>
+            <small>Posted on {{ service.created_at|date:"M d, Y" }}</small>
+        </div>
+    {% empty %}
+        <p>No trade listings available yet. Add some through the <a href="/admin/">admin portal</a>!</p>
+    {% endfor %}
+</body>
+</html>
