@@ -1,7 +1,8 @@
+from django.contrib import admin
 from django.urls import path
-from . import views
+from trades.views import service_requests_api
 
 urlpatterns = [
-    # Homepage URL mapping
-    path('', views.service_list, name='service_list'),
+    path('admin/', admin.site.urls),
+    path('api/service-requests/', service_requests_api),
 ]
