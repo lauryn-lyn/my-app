@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1F1B4D">
+<meta name="description" content="Swapp: trade skills and services with other university students using Stars.">
+<title>Swapp - Trade skills with your campus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+/* ===================== COLORS ===================== */
+:root{
+  --ink:#1F1B4D; --ink-2:#3B3670; --ink-soft:#6B6894;
+  --paper:#F4F6FC; --card:#FFFFFF; --line:#E3E6F2;
+  --gold:#FFB703; --gold-soft:#FFF3D1;
+  --coral:#FF5C7A; --coral-soft:#FFE4EA;
+  --mint:#14B8A6; --mint-soft:#D7F5F1;
+  --head:"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --body:"DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --r:16px; --shadow:0 1px 2px rgba(31,27,77,.06),0 8px 24px -12px rgba(31,27,77,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.logo{font-family:var(--head);line-height:1.1;letter-spacing:-.02em}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit;text-decoration:none}
+svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:8px}
+.muted{color:var(--ink-soft)}
+.hidden{display:none!important}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:12px;font-weight:700;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:active{transform:scale(.97)}
+.btn svg{width:18px;height:18px}
+.btn-gold{background:var(--gold);color:var(--ink);box-shadow:0 6px 16px -8px rgba(255,183,3,.9)}
+.btn-gold:hover{box-shadow:0 10px 22px -8px rgba(255,183,3,.95);transform:translateY(-1px)}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-ink:hover{background:var(--ink-2)}
+.btn-mint{background:var(--mint);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink-soft)}
+.btn-coral-ghost{color:var(--coral);border:1.5px solid var(--coral-soft)}
+.btn-coral-ghost:hover{background:var(--coral-soft)}
+.btn-sm{padding:8px 13px;font-size:14px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.icon-btn{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;position:relative;transition:background .15s}
+.icon-btn:hover{background:#fff}
+
+/* Pills + avatar */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill svg{width:13px;height:13px}
+.pill.gold{background:var(--gold-soft);color:#8A5A00}
+.pill.coral{background:var(--coral-soft);color:#C0254A}
+.pill.mint{background:var(--mint-soft);color:#0B7A6E}
+.pill.ink{background:#E8E7F5;color:var(--ink)}
+.star-fill{fill:var(--gold);stroke:var(--gold)}
+.av{--c:var(--ink);width:40px;height:40px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0;font-family:var(--head)}
+.av.lg{width:84px;height:84px;font-size:30px}
+.av.sm{width:30px;height:30px;font-size:12px}
+
+/* ===================== LOGIN ===================== */
+#login{min-height:100vh;display:flex}
+.login-art{flex:1.1;background:var(--ink);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-art::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1.2px,transparent 1.2px);background-size:22px 22px}
+.login-art>*{position:relative}
+.logo{font-size:30px;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:8px}
+.logo svg{width:24px;height:24px}
+.board{display:flex;flex-direction:column;gap:18px;max-width:420px}
+.pin{background:#fff;color:var(--ink);border-radius:14px;padding:16px 18px 16px 22px;position:relative;box-shadow:0 20px 40px -20px rgba(0,0,0,.6);animation:drop .7s cubic-bezier(.2,1.4,.4,1) both}
+.pin::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:14px 0 0 14px;background:var(--c)}
+.pin:nth-child(1){--c:var(--coral);transform:rotate(-2deg);animation-delay:.15s}
+.pin:nth-child(2){--c:var(--mint);transform:rotate(1.5deg);margin-left:40px;animation-delay:.35s}
+.pin:nth-child(3){--c:var(--gold);transform:rotate(-1deg);margin-left:12px;animation-delay:.55s}
+.pin small{color:var(--ink-soft);font-weight:500}
+.pin b{display:block;font-family:var(--head);font-size:18px}
+@keyframes drop{from{opacity:0;translate:0 -60px;rotate:-8deg}to{opacity:1;translate:0 0;rotate:0}}
+.login-art h1{font-size:clamp(34px,4vw,52px);max-width:520px}
+.login-art h1 em{font-style:normal;color:var(--gold)}
+.login-form-wrap{flex:1;display:grid;place-items:center;padding:32px}
+.login-card{width:100%;max-width:400px}
+.login-card h2{font-size:32px;margin-bottom:6px}
+.tabs{display:flex;background:#E8EAF5;border-radius:12px;padding:4px;margin:24px 0 20px}
+.tabs button{flex:1;padding:9px;border-radius:9px;font-weight:700;color:var(--ink-soft);transition:all .2s}
+.tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-weight:700;font-size:14px}
+.input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 4px rgba(31,27,77,.08)}
+textarea.input{resize:vertical;min-height:84px}
+.err{color:var(--coral);font-size:14px;font-weight:500;min-height:20px;margin-bottom:6px}
+.hint{font-size:13px;color:var(--ink-soft);margin-top:16px;text-align:center}
+
+/* ===================== APP SHELL ===================== */
+#app{display:flex;min-height:100vh}
+.side{width:248px;background:var(--ink);color:#fff;padding:26px 18px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}
+.side .logo{padding:0 10px}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;color:#C9C7E6;font-weight:500;transition:background .15s,color .15s}
+.nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav a[aria-current="page"]{background:rgba(255,255,255,.12);color:#fff}
+.nav a[aria-current="page"] svg{color:var(--gold)}
+.nav .count{margin-left:auto;background:var(--coral);color:#fff;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px}
+.side-foot{margin-top:auto;display:flex;flex-direction:column;gap:12px}
+.side-stars{background:rgba(255,183,3,.12);border:1px solid rgba(255,183,3,.3);border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px}
+.side-stars b{font-family:var(--head);font-size:24px;color:var(--gold)}
+.side-stars svg{width:24px;height:24px}
+.side-user{display:flex;align-items:center;gap:10px;padding:6px}
+.side-user div{min-width:0;flex:1}
+.side-user b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-user small{color:#9C9AC4;font-size:12px}
+.side-user .icon-btn{width:36px;height:36px;color:#C9C7E6}
+.side-user .icon-btn:hover{background:rgba(255,255,255,.08)}
+
+.content{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:10px;padding:18px 32px;position:sticky;top:0;z-index:20;background:rgba(244,246,252,.85);backdrop-filter:blur(10px)}
+.top h1{font-size:24px;flex:1}
+.top .logo{display:none;font-size:24px;flex:1}
+.badge{position:absolute;top:6px;right:6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--coral);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;border:2px solid var(--paper);animation:pop .4s}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+main{padding:8px 32px 48px;flex:1;max-width:1180px;width:100%}
+.view{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tabbar{display:none}
+
+/* Notifications */
+.notif-wrap{position:relative}
+.notif-panel{position:absolute;right:0;top:50px;width:360px;max-width:calc(100vw - 32px);background:#fff;border-radius:var(--r);box-shadow:0 24px 60px -20px rgba(31,27,77,.4);border:1px solid var(--line);overflow:hidden;animation:fadeUp .2s ease;z-index:40}
+.notif-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+.notif-head h3{font-size:17px}
+.notif-head button{font-size:13px;font-weight:700;color:var(--ink-soft)}
+.notif-head button:hover{color:var(--ink)}
+.notif-list{max-height:380px;overflow:auto}
+.notif{display:flex;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);width:100%;text-align:left;transition:background .15s}
+.notif:hover{background:var(--paper)}
+.notif.unread{background:#FBFAFF}
+.notif.unread::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--coral);flex-shrink:0;margin-top:6px}
+.notif .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.notif .ic svg{width:17px;height:17px}
+.notif p{font-size:14px;flex:1}
+.notif small{display:block;color:var(--ink-soft);font-size:12px}
+
+/* ===================== DISCOVER ===================== */
+.hero{background:var(--ink);color:#fff;border-radius:22px;padding:30px 32px;display:flex;gap:24px;align-items:flex-end;justify-content:space-between;position:relative;overflow:hidden;margin-bottom:22px}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(255,183,3,.35),transparent 70%);animation:glow 6s ease-in-out infinite alternate}
+@keyframes glow{to{transform:translate(-40px,30px) scale(1.2)}}
+.hero>*{position:relative;z-index:1}
+.eyebrow{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:8px}
+.hero h1{font-size:clamp(28px,3.4vw,40px);margin-bottom:8px}
+.hl{background:linear-gradient(transparent 62%,rgba(255,92,122,.7) 62%);padding:0 2px}
+.hero p.muted{color:#C9C7E6;max-width:440px}
+.hero-stars{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 20px;min-width:180px}
+.hero-stars span{font-size:13px;color:#C9C7E6}
+.hero-stars strong{display:flex;align-items:center;gap:8px;font-family:var(--head);font-size:40px;color:var(--gold)}
+.hero-stars strong svg{width:30px;height:30px}
+.hero-stars a{font-size:13px;font-weight:700;color:#fff;opacity:.8}
+.hero-stars a:hover{opacity:1}
+.searchbar{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:0 16px;margin-bottom:14px;transition:border-color .15s,box-shadow .15s}
+.searchbar:focus-within{border-color:var(--ink);box-shadow:0 0 0 4px rgba(31,27,77,.08)}
+.searchbar svg{color:var(--ink-soft)}
+.searchbar input{flex:1;border:0;padding:14px 0;background:transparent;outline:none;min-width:0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:22px;scrollbar-width:none}
+.chip{padding:8px 15px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-weight:500;font-size:14px;white-space:nowrap;transition:all .15s}
+.chip:hover{border-color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip{display:inline-flex;align-items:center;gap:7px}
+.chip-n{font-size:11px;font-weight:700;min-width:20px;padding:1px 6px;border-radius:999px;background:var(--paper);color:var(--ink-soft);text-align:center}
+.chip[aria-pressed="true"] .chip-n{background:var(--gold);color:var(--ink)}
+.kbd{font:600 12px/1 inherit;padding:4px 7px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;color:var(--ink-soft);background:var(--paper)}
+.searchbar:focus-within .kbd{opacity:0}
+.sort select{appearance:none;border:1.5px solid var(--line);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231F1B4D' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;border-radius:10px;padding:8px 32px 8px 12px;font:inherit;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer}
+.sort select:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.result-count{font-size:14px;color:var(--ink-soft);margin:-4px 0 12px;min-height:1px}
+.link-btn{background:none;border:0;padding:0 0 0 6px;font:inherit;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.sec-head{display:flex;align-items:center;gap:12px;margin:8px 0 14px;flex-wrap:wrap}
+.sec-head h2{font-size:22px}
+.sec-head .seg{margin-left:auto}
+.seg{display:flex;background:#E8EAF5;border-radius:10px;padding:3px}
+.seg button{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:700;color:var(--ink-soft)}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.match-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:30px}
+.match{background:linear-gradient(135deg,#fff 60%,var(--coral-soft));border:1.5px solid #FFCAD5;border-radius:var(--r);padding:18px;text-align:left;display:flex;flex-direction:column;gap:12px;transition:transform .2s,box-shadow .2s;animation:fadeUp .4s ease both;animation-delay:var(--d)}
+.match:hover{transform:translateY(-4px);box-shadow:0 18px 30px -18px rgba(255,92,122,.6)}
+.match-who{display:flex;align-items:center;gap:10px}
+.match-who b{display:block}
+.match-who small{color:var(--ink-soft);font-size:13px}
+.swaprow{display:flex;align-items:center;gap:8px;font-size:14px}
+.swaprow>div{flex:1;background:#fff;border-radius:10px;padding:8px 10px;border:1px solid var(--line);min-width:0}
+.swaprow small{display:block;color:var(--ink-soft);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.swaprow b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.swaprow>svg{color:var(--coral);width:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.ticket{--c:var(--ink);background:var(--card);border-radius:var(--r);padding:18px 18px 16px 24px;position:relative;text-align:left;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;animation:fadeUp .4s ease both;animation-delay:var(--d);overflow:hidden}
+.ticket::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c)}
+.ticket::after{content:"";position:absolute;left:-7px;top:50%;width:14px;height:14px;border-radius:50%;background:var(--paper);transform:translateY(-50%)}
+.ticket:hover{transform:translateY(-4px) rotate(-.3deg);box-shadow:0 20px 36px -18px rgba(31,27,77,.35)}
+.ticket-top{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ticket h3{font-size:18px}
+.ticket p{font-size:14px;color:var(--ink-soft);flex:1}
+.ticket-foot{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1.5px dashed var(--line)}
+.ticket-foot .who{flex:1;min-width:0;font-size:14px}
+.ticket-foot .who b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticket-foot .who small{color:var(--ink-soft);display:flex;align-items:center;gap:3px}
+.ticket-foot .who small svg{width:12px;height:12px}
+.price{display:flex;align-items:center;gap:4px;font-family:var(--head);font-weight:800;font-size:18px;color:var(--ink);background:var(--gold-soft);padding:4px 10px;border-radius:10px}
+.price svg{width:16px;height:16px}
+.empty{text-align:center;padding:48px 20px;border:2px dashed var(--line);border-radius:var(--r);color:var(--ink-soft)}
+.empty svg{width:36px;height:36px;margin-bottom:10px;color:var(--line)}
+.empty h3{color:var(--ink);font-size:18px;margin-bottom:4px}
+
+/* ===================== EXCHANGES ===================== */
+.ex-list{display:flex;flex-direction:column;gap:14px}
+.ex{background:#fff;border-radius:var(--r);padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px;animation:fadeUp .35s ease both;animation-delay:var(--d)}
+.ex-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ex-head .who{flex:1;min-width:0}
+.ex-head .who b{display:block}
+.ex-head .who small{color:var(--ink-soft);font-size:13px}
+.ex .swaprow>div{background:var(--paper);border:0;padding:12px 14px}
+.ex .swaprow b{white-space:normal}
+.ex-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.ex.leaving{animation:leave .35s ease forwards}
+@keyframes leave{to{opacity:0;transform:translateX(30px)}}
+.stars-input{display:flex;gap:4px}
+.stars-input button{padding:4px;color:var(--line);transition:transform .15s,color .15s}
+.stars-input button svg{width:34px;height:34px}
+.stars-input button.on{color:var(--gold)}
+.stars-input button.on svg{fill:var(--gold)}
+.stars-input button:hover{transform:scale(1.15)}
+
+/* ===================== CHAT ===================== */
+.chat{display:flex;background:#fff;border-radius:20px;box-shadow:var(--shadow);height:calc(100vh - 120px);min-height:440px;overflow:hidden}
+.convos{width:300px;border-right:1px solid var(--line);overflow:auto;flex-shrink:0}
+.convo{display:flex;gap:12px;padding:14px 16px;align-items:center;border-bottom:1px solid var(--line);transition:background .15s}
+.convo:hover{background:var(--paper)}
+.convo[aria-current="true"]{background:var(--paper);box-shadow:inset 3px 0 0 var(--gold)}
+.convo div{min-width:0;flex:1}
+.convo b{display:block;font-size:15px}
+.convo small{display:block;color:var(--ink-soft);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thread{flex:1;display:flex;flex-direction:column;min-width:0}
+.thread-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.thread-head b{display:block}
+.thread-head small{color:var(--mint);font-size:13px;font-weight:500}
+.thread-head .back{display:none}
+.msgs{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:8px;background:radial-gradient(rgba(31,27,77,.05) 1px,transparent 1px) 0 0/18px 18px}
+.msg{max-width:72%;padding:10px 14px;border-radius:18px;font-size:15px;animation:msgIn .25s ease both;overflow-wrap:anywhere}
+.msg.them{background:var(--paper);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:6px}
+.msg.me{background:var(--ink);color:#fff;align-self:flex-end;border-bottom-right-radius:6px}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(.96)}}
+.typing{display:flex;gap:4px;padding:14px 16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--ink-soft);animation:bounce 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+.composer{display:flex;gap:10px;padding:14px;border-top:1px solid var(--line)}
+.composer .input{border-radius:999px;padding:12px 18px}
+.composer .btn{border-radius:999px;width:48px;padding:0}
+.chat-empty{flex:1;display:grid;place-items:center;text-align:center;color:var(--ink-soft);padding:20px}
+
+/* ===================== STARS ===================== */
+.stars-top{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px;margin-bottom:24px}
+.bal{background:var(--ink);color:#fff;border-radius:22px;padding:26px;position:relative;overflow:hidden}
+.bal::after{content:"";position:absolute;right:-30px;bottom:-30px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,183,3,.35),transparent 70%)}
+.bal span{color:#C9C7E6;font-size:14px}
+.bal strong{display:flex;align-items:center;gap:10px;font-family:var(--head);font-size:64px;color:var(--gold);line-height:1;margin:10px 0}
+.bal strong svg{width:46px;height:46px;animation:spin 8s linear infinite}
+@keyframes spin{to{rotate:360deg}}
+.stat{background:#fff;border-radius:22px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.stat span{color:var(--ink-soft);font-size:14px}
+.stat strong{font-family:var(--head);font-size:36px}
+.stat .bar{height:8px;border-radius:99px;background:var(--paper);overflow:hidden;margin-top:auto}
+.stat .bar i{display:block;height:100%;border-radius:99px;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start}
+.panel{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:20px}
+.panel h2{font-size:20px;margin-bottom:12px}
+.tx{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);animation:fadeUp .3s ease both;animation-delay:var(--d)}
+.tx:last-child{border-bottom:0}
+.tx .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center}
+.tx .ic svg{width:18px;height:18px}
+.tx div{flex:1}
+.tx small{display:block;color:var(--ink-soft);font-size:12px}
+.tx b.amt{font-family:var(--head);font-size:18px}
+.way{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.way:last-child{border-bottom:0}
+.way .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.way .ic svg{width:17px;height:17px}
+.way b{display:block;font-size:15px}
+.way small{color:var(--ink-soft);font-size:13px}
+
+/* ===================== PROFILE ===================== */
+.prof{background:#fff;border-radius:22px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
+.prof-cover{height:110px;background:var(--ink);background-image:radial-gradient(rgba(255,255,255,.1) 1.2px,transparent 1.2px),linear-gradient(120deg,var(--ink),var(--ink-2));background-size:20px 20px,auto}
+.prof-body{padding:0 24px 22px;display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;margin-top:-42px}
+.prof-body .av{border:4px solid #fff}
+.prof-info{flex:1;min-width:200px}
+.prof-info h2{font-size:28px}
+.prof-info p{color:var(--ink-soft);font-size:15px}
+.prof-stats{display:flex;gap:24px;padding:16px 24px;border-top:1px solid var(--line);flex-wrap:wrap}
+.prof-stats div b{display:block;font-family:var(--head);font-size:22px}
+.prof-stats div small{color:var(--ink-soft);font-size:13px}
+.prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.panel-head h2{margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:7px 8px 7px 13px;border-radius:999px;font-size:14px;font-weight:500;animation:pop .3s}
+.tag.teach{background:var(--mint-soft);color:#0B6B61}
+.tag.want{background:var(--coral-soft);color:#B11F43}
+.tag button{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;opacity:.6}
+.tag button:hover{opacity:1;background:rgba(0,0,0,.08)}
+.tag button svg{width:12px;height:12px}
+.add-row{display:flex;gap:8px}
+.add-row .input{padding:9px 12px}
+.mini{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:var(--paper);margin-bottom:8px}
+.mini div{flex:1;min-width:0}
+.mini b{display:block;font-size:15px}
+.mini small{color:var(--ink-soft);font-size:13px}
+.review{padding:12px 0;border-bottom:1px solid var(--line)}
+.review:last-child{border-bottom:0}
+.review-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.review-top b{flex:1;font-size:15px}
+.rstars{display:flex;gap:1px}
+.rstars svg{width:14px;height:14px;color:var(--line)}
+.rstars svg.on{color:var(--gold);fill:var(--gold)}
+.review p{font-size:14px;color:var(--ink-soft)}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.swatches label{position:relative}
+.swatches input{position:absolute;opacity:0}
+.swatches span{display:block;width:34px;height:34px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 0 0 1.5px var(--line);transition:transform .15s}
+.swatches input:checked+span{box-shadow:0 0 0 3px var(--ink);transform:scale(1.08)}
+.swatches input:focus-visible+span{outline:3px solid var(--gold);outline-offset:3px}
+
+/* ===================== MODAL / TOAST / BURST ===================== */
+#modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px}
+#modal[hidden]{display:none}
+.backdrop{position:absolute;inset:0;background:rgba(31,27,77,.5);backdrop-filter:blur(3px);animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.sheet{position:relative;background:#fff;border-radius:22px;width:100%;max-width:500px;max-height:calc(100vh - 32px);overflow:auto;padding:24px;animation:sheetIn .3s cubic-bezier(.2,1.2,.4,1)}
+@keyframes sheetIn{from{opacity:0;transform:translateY(24px) scale(.97)}}
+.sheet-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.sheet-head h2{font-size:24px;flex:1}
+.sheet-head .icon-btn{width:36px;height:36px;margin:-6px -6px 0 0}
+.sheet-head .icon-btn:hover{background:var(--paper)}
+.sheet-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.opt{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--ink-soft)}
+.opt:has(input:checked){border-color:var(--ink);background:#F7F7FD}
+.opt:has(input:disabled){opacity:.5;cursor:not-allowed}
+.opt input{accent-color:var(--ink);width:18px;height:18px}
+.opt div{flex:1}
+.opt b{display:block;font-size:15px}
+.opt small{color:var(--ink-soft);font-size:13px}
+.group-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:14px 0 8px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.detail-box{background:var(--paper);border-radius:14px;padding:16px;margin-bottom:6px;position:relative;overflow:hidden}
+.detail-box::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
+.detail-box h3{font-size:19px;margin:6px 0 4px}
+.detail-box p{font-size:14px;color:var(--ink-soft)}
+#toasts{position:fixed;bottom:24px;right:24px;z-index:80;display:flex;flex-direction:column;gap:10px;align-items:flex-end;pointer-events:none}
+.toast{background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;display:flex;align-items:center;gap:10px;font-weight:500;box-shadow:0 18px 40px -14px rgba(31,27,77,.6);animation:toastIn .4s cubic-bezier(.2,1.3,.4,1) both;max-width:340px}
+.toast svg{color:var(--gold)}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(40px)}}
+.burst{position:fixed;pointer-events:none;z-index:90;color:var(--gold);animation:burst .9s cubic-bezier(.2,.8,.3,1) forwards}
+.burst svg{width:16px;height:16px;fill:var(--gold);stroke:var(--gold)}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(.4);opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1) rotate(180deg);opacity:0}}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:1000px){.stars-top{grid-template-columns:1fr 1fr}.bal{grid-column:1/-1}.two-col,.prof-grid{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .login-art{display:none}
+  .side{display:none}
+  .top{padding:14px 18px}
+  .top h1{display:none}
+  .top .logo{display:flex}
+  main{padding:4px 18px 100px}
+  .hero{flex-direction:column;align-items:stretch;padding:24px}
+  .tabbar{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--ink-soft);padding:6px 0;border-radius:10px;position:relative}
+  .tabbar a[aria-current="page"]{color:var(--ink)}
+  .tabbar a[aria-current="page"] svg{color:var(--ink);fill:var(--gold-soft)}
+  .tabbar .count{position:absolute;top:0;left:55%;background:var(--coral);color:#fff;font-size:10px;border-radius:99px;padding:0 5px}
+  .chat{height:calc(100vh - 190px)}
+  .convos{width:100%;border:0}
+  .chat.has-thread .convos{display:none}
+  .chat:not(.has-thread) .thread{display:none}
+  .thread-head .back{display:grid}
+  .msg{max-width:85%}
+  #toasts{left:16px;right:16px;bottom:88px;align-items:stretch}
+  .row2{grid-template-columns:1fr}
+  .prof-body{flex-direction:column;align-items:flex-start;gap:12px}
+  .prof-info{min-width:0}
+  .sheet{align-self:end;border-radius:22px 22px 0 0;max-height:90vh}
+  #modal{padding:0}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="login">
+  <section class="login-art" aria-hidden="true">
+    <div class="logo"><svg class="star-fill"><use href="#i-star"/></svg>Swapp</div>
+    <div class="board">
+      <div class="pin"><small>Lena · Music</small><b>Guitar lessons ↔ Web design</b></div>
+      <div class="pin"><small>Yusuf · Repairs</small><b>Phone screen fix · 4 Stars</b></div>
+      <div class="pin"><small>Chloé · Languages</small><b>French ↔ Python</b></div>
+    </div>
+    <h1>Your campus already knows <em>everything</em>. Swap for it.</h1>
+  </section>
+  <section class="login-form-wrap">
+    <form class="login-card" id="loginForm" novalidate>
+      <div class="logo" style="margin-bottom:28px"><svg class="star-fill"><use href="#i-star"/></svg>Swapp</div>
+      <h2 id="loginTitle">Welcome back</h2>
+      <p class="muted">Teach what you know. Learn what you don&apos;t.</p>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-auth="login">Log in</button>
+        <button type="button" role="tab" aria-selected="false" data-auth="register">Register</button>
+      </div>
+      <div class="field hidden" id="nameField"><label for="lname">Full name</label><input class="input" id="lname" autocomplete="name" placeholder="Amina Tchoua"></div>
+      <div class="field"><label for="lemail">University email</label><input class="input" id="lemail" type="email" autocomplete="email" placeholder="you@ictuniversity.edu.cm"></div>
+      <div class="field"><label for="lpass">Password</label><input class="input" id="lpass" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+      <p class="err" id="loginErr" role="alert"></p>
+      <button class="btn btn-gold" style="width:100%" id="loginBtn">Log in</button>
+      <p class="hint">Demo mode: any email with an @ works.</p>
+    </form>
+  </section>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div id="app" class="hidden">
+  <aside class="side">
+    <a href="#discover" class="logo"><svg class="star-fill"><use href="#i-star"/></svg>Swapp</a>
+    <nav class="nav" id="sideNav" aria-label="Main"></nav>
+    <div class="side-foot">
+      <a href="#stars" class="side-stars"><svg class="star-fill"><use href="#i-star"/></svg><div><b id="sideStars">0</b> <small style="color:#C9C7E6">Stars</small></div></a>
+      <div class="side-user" id="sideUser"></div>
+    </div>
+  </aside>
+  <div class="content">
+    <header class="top">
+      <a href="#discover" class="logo"><svg class="star-fill"><use href="#i-star"/></svg>Swapp</a>
+      <h1 id="pageTitle">Discover</h1>
+      <button class="btn btn-ink btn-sm" data-act="add-listing"><svg><use href="#i-plus"/></svg><span>New listing</span></button>
+      <div class="notif-wrap">
+        <button class="icon-btn" data-act="notif-toggle" aria-label="Notifications" aria-expanded="false" id="bellBtn"><svg><use href="#i-bell"/></svg><span id="bellBadge"></span></button>
+        <div id="notifPanel" class="notif-panel hidden"></div>
+      </div>
+    </header>
+    <main id="main"></main>
+  </div>
+  <nav class="tabbar" id="tabNav" aria-label="Main"></nav>
+</div>
+
+<div id="modal" hidden></div>
+<div id="toasts" aria-live="polite"></div>
+
+<!-- Icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m19 12-7 7-7-7"/><path d="M12 5v14"/></symbol>
+</svg>
+
+<script>
+/* ===================== 1. FAKE DATA ===================== */
+let me = { name:"Amina", email:"", color:"#14B8A6", stars:12, uni:"ICTU", bio:"Second-year CS student. I love clean interfaces and late-night coding.",
+  teach:["Web design basics"], want:["Guitar","Python"] };
+
+let users = [
+  { id:1, name:"Kwame Mensah", color:"#FF5C7A", rating:4.9, wants:["Web design"] },
+  { id:2, name:"Lena Okafor",  color:"#7C5CFF", rating:4.8, wants:["Web design"] },
+  { id:3, name:"Yusuf Bello",  color:"#F97316", rating:4.7, wants:["French"] },
+  { id:4, name:"Chloé Martin", color:"#0EA5E9", rating:5.0, wants:["Python"] },
+  { id:5, name:"Diego Ruiz",   color:"#14B8A6", rating:4.6, wants:["Guitar"] },
+  { id:6, name:"Mei Chen",     color:"#E11D8F", rating:4.9, wants:["Photography"] },
+  { id:7, name:"Sara Ndiaye",  color:"#65A30D", rating:4.8, wants:["Web design","Video editing"] },
+  { id:8, name:"Fatima Njoya", color:"#B45309", rating:4.9, wants:["Web design","Excel"] },
+  { id:9, name:"Brice Tabi",   color:"#4F46E5", rating:4.7, wants:["Python","Photography"] }
+];
+
+let listings = [
+  { id:1,  userId:5, type:"skill",   category:"Tech",      title:"Python for beginners", stars:3, desc:"Variables, loops and your first script. Patient, beginner-friendly sessions." },
+  { id:2,  userId:2, type:"skill",   category:"Music",     title:"Guitar: first 5 chords", stars:3, desc:"Bring any guitar. By the end you'll play a full song." },
+  { id:3,  userId:3, type:"service", category:"Repairs",   title:"Phone screen repair", stars:4, desc:"Cracked screens and battery swaps. You buy the part, I fix it." },
+  { id:4,  userId:4, type:"skill",   category:"Languages", title:"Conversational French", stars:2, desc:"Native speaker. Relaxed practice for exams or travel." },
+  { id:5,  userId:6, type:"service", category:"Career",    title:"CV and cover letter review", stars:2, desc:"I've reviewed 40+ CVs for internships. Detailed written feedback in 48h." },
+  { id:6,  userId:7, type:"skill",   category:"Creative",  title:"Phone photography", stars:2, desc:"Lighting, framing and editing with just your phone." },
+  { id:7,  userId:1, type:"service", category:"Tech",      title:"Laptop cleanup and speed-up", stars:3, desc:"Slow laptop? I'll clean it, reinstall what's needed and back up your files." },
+  { id:8,  userId:4, type:"skill",   category:"Tech",      title:"Excel for assignments", stars:2, desc:"Formulas, pivot tables and charts for your reports." },
+  { id:9,  userId:3, type:"skill",   category:"Music",     title:"Beat making in FL Studio", stars:3, desc:"From an empty project to a finished loop." },
+  { id:10, userId:6, type:"skill",   category:"Languages", title:"Mandarin basics", stars:3, desc:"Pinyin, tones and everyday phrases." },
+  { id:11, userId:7, type:"service", category:"Design",    title:"Event poster design", stars:3, desc:"Eye-catching posters for clubs and parties. Two revisions included." },
+  { id:12, userId:0, type:"skill",   category:"Design",    title:"Web design basics", stars:3, desc:"Layout, color and type. We'll build a simple one-page site together." },
+  { id:13, userId:8, type:"service", category:"Braiding",  title:"Box braids and knotless braids", stars:5, desc:"Neat, long-lasting braids in my room near campus. Bring your extensions, or I can advise you on what to buy." },
+  { id:14, userId:8, type:"skill",   category:"Braiding",  title:"Learn to cornrow", stars:3, desc:"Step-by-step parting, gripping and feeding in. Practise on a mannequin head, then on a friend." },
+  { id:15, userId:9, type:"service", category:"Tailoring", title:"Tailoring and alterations", stars:3, desc:"Hemming, taking in, zips and buttons. Kaba, suits and uniforms done in 2-3 days." },
+  { id:16, userId:9, type:"skill",   category:"Tailoring", title:"Sewing basics: your first garment", stars:4, desc:"Threading the machine, reading patterns and sewing a simple wax-print top together." }
+];
+
+let exchanges = [
+  { id:1, userId:2, theirs:"Guitar: first 5 chords", mine:"Web design basics", stars:0, status:"pending",  incoming:true,  rated:false },
+  { id:2, userId:1, theirs:"2 Stars",                mine:"Web design basics", stars:2, status:"pending",  incoming:true,  rated:false },
+  { id:3, userId:5, theirs:"Python for beginners",   mine:"Web design basics", stars:0, status:"accepted", incoming:false, rated:false },
+  { id:4, userId:6, theirs:"CV and cover letter review", mine:"2 Stars",       stars:2, status:"rejected", incoming:false, rated:false }
+];
+
+let transactions = [
+  { label:"Welcome gift", amount:10 },
+  { label:"Taught Web design to Sara", amount:3 },
+  { label:"Excel help from Chloé", amount:-2 },
+  { label:"Review bonus", amount:1 }
+];
+
+let messages = {
+  2:[ {from:"them", text:"Hey! I saw you teach web design."}, {from:"them", text:"Want to swap for guitar lessons? I sent you a proposal."} ],
+  5:[ {from:"me", text:"Hi Diego! Thanks for accepting."}, {from:"them", text:"Of course! Is Thursday after 4pm good for our first Python session?"} ],
+  1:[ {from:"them", text:"Hi, I'd pay 2 Stars for a quick web design intro. Interested?"} ]
+};
+
+let reviews = [
+  { userId:7, rating:5, text:"Amina explained layout so clearly. My club website finally looks good!" },
+  { userId:4, rating:4, text:"Friendly and on time. Would swap again." }
+];
+
+let notifications = [
+  { icon:"swap", tone:"coral", text:"Lena proposed a swap: Guitar for Web design.", time:"5 min ago", read:false, link:"#exchanges" },
+  { icon:"chat", tone:"ink",   text:"Diego sent you a message.", time:"1 h ago", read:false, link:"#chat/5" },
+  { icon:"star", tone:"gold",  text:"You earned a review bonus of 1 Star.", time:"Yesterday", read:true, link:"#stars" }
+];
+
+const CATS = ["All","Tech","Music","Languages","Design","Braiding","Tailoring","Repairs","Career","Creative"];
+const COLORS = ["#14B8A6","#FF5C7A","#7C5CFF","#F97316","#0EA5E9","#E11D8F","#65A30D","#1F1B4D"];
+const SORTS = [["match","Best for me"],["new","Newest"],["cheap","Fewest Stars"],["top","Top rated"]];
+const ui = { q:"", cat:"All", type:"all", sort:"match", exTab:"incoming" };
+let nextId = 100;
+
+/* ===================== 2. DATA FUNCTIONS ===================== */
+function proposeExchange(listingId, offer, note){
+  const l = listings.find(x => x.id === listingId);
+  const paying = offer === "__stars";
+  const ex = { id:nextId++, userId:l.userId, theirs:l.title, mine: paying ? `${l.stars} Stars` : offer,
+    stars: paying ? l.stars : 0, status:"pending", incoming:false, rated:false };
+  exchanges.unshift(ex);
+  if (note) pushMessage(l.userId, "me", note);
+  simulateAnswer(ex);
+  return ex;
+}
+
+function answerExchange(id, status){
+  const ex = exchanges.find(x => x.id === id);
+  ex.status = status;
+  const u = user(ex.userId);
+  if (status === "accepted"){
+    if (ex.stars){
+      if (ex.incoming){ me.stars += ex.stars; transactions.unshift({ label:`${first(u.name)} paid for ${ex.mine}`, amount:ex.stars }); }
+      else { me.stars -= ex.stars; transactions.unshift({ label:`${ex.theirs} with ${first(u.name)}`, amount:-ex.stars }); }
+    }
+    setTimeout(() => replyFrom(ex.userId, `Yay, thanks for accepting! When are you free this week?`), 1800);
+  }
+  updateChrome();
+}
+
+function pushMessage(userId, from, text){
+  (messages[userId] ||= []).push({ from, text });
+}
+
+function sendMessage(userId, text){
+  pushMessage(userId, "me", text);
+  const replies = ["Sounds good!","Perfect, see you then.","Haha yes, deal.","Can we meet at the library?","Great, I'll bring my notes.","Thanks! That works for me."];
+  replyFrom(userId, replies[Math.floor(Math.random()*replies.length)], 1400);
+}
+
+function addReview(exId, rating, text){
+  const ex = exchanges.find(x => x.id === exId);
+  ex.rated = true;
+  const u = user(ex.userId);
+  u.rating = Math.round(((u.rating * 9) + rating) / 10 * 10) / 10;
+  me.stars += 1;
+  transactions.unshift({ label:`Review bonus for rating ${first(u.name)}`, amount:1 });
+  updateChrome();
+}
+
+function addListing(data){
+  listings.unshift({ id:nextId++, userId:0, ...data });
+  if (data.type === "skill" && !me.teach.some(t => same(t, data.title))) me.teach.push(data.title);
+}
+
+/* Simulated other users, so the demo feels alive. Remove once the backend is connected. */
+function simulateAnswer(ex){
+  setTimeout(() => {
+    if (ex.status !== "pending") return;
+    const u = user(ex.userId);
+    const ok = (!ex.stars || me.stars >= ex.stars) && Math.random() < .85;
+    answerExchange(ex.id, ok ? "accepted" : "rejected");
+    notify(ok ? "check" : "x", ok ? "mint" : "coral", `${first(u.name)} ${ok ? "accepted" : "declined"} your swap for ${ex.theirs}.`, "#exchanges");
+    toast(ok ? `${first(u.name)} accepted your swap!` : `${first(u.name)} declined this time.`);
+    if (ok) burstAt(window.innerWidth - 120, 60);
+    refresh(["exchanges","stars","profile"]);
+  }, 4200);
+}
+
+function replyFrom(userId, text, delay = 1600){
+  typing[userId] = true; refresh(["chat"], true);
+  setTimeout(() => {
+    typing[userId] = false;
+    pushMessage(userId, "them", text);
+    const onThread = location.hash === `#chat/${userId}`;
+    if (!onThread) notify("chat", "ink", `${first(user(userId).name)}: ${text}`, `#chat/${userId}`);
+    refresh(["chat"], true);
+  }, delay);
+}
+const typing = {};
+
+/* ===================== 3. HELPERS ===================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const ini = n => String(n).split(/\s+/).filter(Boolean).slice(0,2).map(w => w[0]).join("").toUpperCase();
+const first = n => String(n).split(" ")[0];
+const user = id => id === 0 ? { id:0, name:me.name, color:me.color, rating:myRating(), wants:me.want } : users.find(u => u.id === id);
+const icon = (id, cls = "") => `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
+const av = (u, cls = "") => `<span class="av ${cls}" style="--c:${esc(u.color)}" aria-hidden="true">${esc(ini(u.name))}</span>`;
+const norm = s => String(s).toLowerCase().replace(/[^a-z0-9à-ÿ ]/g, " ").replace(/\s+/g, " ").trim();
+function same(a, b){
+  a = norm(a); b = norm(b);
+  if (!a || !b) return false;
+  if (a.includes(b) || b.includes(a)) return true;
+  return a.split(" ").filter(w => w.length > 3).some(w => b.split(" ").includes(w));
+}
+const myRating = () => reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1) : "New";
+const rstars = n => `<span class="rstars" aria-label="${n} out of 5">${[1,2,3,4,5].map(i => icon("star", i <= n ? "on" : "")).join("")}</span>`;
+const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
+const pendingIn = () => exchanges.filter(e => e.incoming && e.status === "pending").length;
+
+function toast(text){
+  const t = document.createElement("div");
+  t.className = "toast"; t.innerHTML = icon("star", "star-fill") + `<span>${esc(text)}</span>`;
+  $("#toasts").appendChild(t);
+  setTimeout(() => { t.classList.add("out"); setTimeout(() => t.remove(), 300); }, 2800);
+}
+
+function countUp(el){
+  const end = +el.dataset.count, start = performance.now(), dur = 900;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = end; return; }
+  const step = now => { const p = Math.min(1, (now - start) / dur); el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+
+function burstAt(x, y){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  for (let i = 0; i < 12; i++){
+    const s = document.createElement("span");
+    const a = (Math.PI * 2 * i) / 12, r = 50 + Math.random() * 50;
+    s.className = "burst"; s.innerHTML = icon("star");
+    s.style.cssText = `left:${x}px;top:${y}px;--x:${Math.cos(a) * r}px;--y:${Math.sin(a) * r}px`;
+    document.body.appendChild(s); setTimeout(() => s.remove(), 950);
+  }
+}
+const burstFrom = el => { const r = el.getBoundingClientRect(); burstAt(r.left + r.width / 2, r.top + r.height / 2); };
+
+function notify(ic, tone, text, link){
+  notifications.unshift({ icon:ic, tone, text, time:"Just now", read:false, link });
+  updateChrome();
+  if (!$("#notifPanel").classList.contains("hidden")) renderNotifs();
+}
+
+function openModal(html){
+  const m = $("#modal");
+  m.innerHTML = `<div class="backdrop" data-act="close-modal"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle">${html}</div>`;
+  m.hidden = false;
+  setTimeout(() => (m.querySelector("[autofocus]") || m.querySelector("input,textarea,button:not(.icon-btn)"))?.focus(), 50);
+}
+const closeModal = () => { $("#modal").hidden = true; $("#modal").innerHTML = ""; };
+const sheetHead = t => `<div class="sheet-head"><h2 id="mTitle">${t}</h2><button class="icon-btn" data-act="close-modal" aria-label="Close">${icon("x")}</button></div>`;
+
+/* ===================== 4. LOGIN + ROUTER ===================== */
+let authMode = "login";
+document.querySelectorAll("[data-auth]").forEach(b => b.addEventListener("click", () => {
+  authMode = b.dataset.auth;
+  document.querySelectorAll("[data-auth]").forEach(x => x.setAttribute("aria-selected", x === b));
+  $("#nameField").classList.toggle("hidden", authMode !== "register");
+  $("#loginTitle").textContent = authMode === "register" ? "Join your campus" : "Welcome back";
+  $("#loginBtn").textContent = authMode === "register" ? "Create account" : "Log in";
+  $("#loginErr").textContent = "";
+}));
+
+$("#loginForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const email = $("#lemail").value.trim(), name = $("#lname").value.trim();
+  if (!email.includes("@")) { $("#loginErr").textContent = "Please enter a valid email with an @."; $("#lemail").focus(); return; }
+  if (authMode === "register" && !name) { $("#loginErr").textContent = "Please add your name."; $("#lname").focus(); return; }
+  me.email = email;
+  const fromEmail = email.split("@")[0].replace(/[._-]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  me.name = name || fromEmail || "Student";
+  if (authMode === "register") { transactions = [{ label:"Welcome gift", amount:10 }]; me.stars = 10; reviews = []; }
+  $("#login").classList.add("hidden");
+  $("#app").classList.remove("hidden");
+  if (!location.hash || location.hash === "#") location.hash = "#discover";
+  route();
+  setTimeout(() => toast(`Welcome, ${first(me.name)}! You have ${me.stars} Stars.`), 400);
+});
+
+const NAV = [
+  { id:"discover",  label:"Discover",  icon:"compass" },
+  { id:"exchanges", label:"Exchanges", icon:"swap" },
+  { id:"chat",      label:"Messages",  icon:"chat" },
+  { id:"stars",     label:"Stars",     icon:"star" },
+  { id:"profile",   label:"Profile",   icon:"user" }
+];
+const SCREENS = { discover, exchanges:exchangesView, chat, stars, profile };
+
+function currentRoute(){ const [name, arg] = location.hash.slice(1).split("/"); return { name: SCREENS[name] ? name : "discover", arg }; }
+
+function route(){
+  if ($("#app").classList.contains("hidden")) return;
+  const { name, arg } = currentRoute();
+  $("#pageTitle").textContent = NAV.find(n => n.id === name).label;
+  document.title = `${NAV.find(n => n.id === name).label} · Swapp`;
+  SCREENS[name](arg);
+  $("#main").querySelectorAll("[data-count]").forEach(countUp);
+  updateChrome();
+  closeNotifs();
+  window.scrollTo({ top:0 });
+}
+window.addEventListener("hashchange", route);
+
+/* Re-render the current screen only if it is one of `names`. `quiet` keeps scroll + focus. */
+function refresh(names, quiet){
+  const { name, arg } = currentRoute();
+  if (!names.includes(name)) return;
+  if (name === "chat" && quiet) { renderThread(arg); renderConvos(arg); return; }
+  SCREENS[name](arg);
+  $("#main").querySelectorAll("[data-count]").forEach(el => el.textContent = el.dataset.count);
+}
+
+function updateChrome(){
+  const { name } = currentRoute();
+  const p = pendingIn();
+  const link = n => `<a href="#${n.id}" ${n.id === name ? 'aria-current="page"' : ""}>${icon(n.icon)}<span>${n.label}</span>${n.id === "exchanges" && p ? `<span class="count">${p}</span>` : ""}</a>`;
+  $("#sideNav").innerHTML = NAV.map(link).join("");
+  $("#tabNav").innerHTML = NAV.map(link).join("");
+  $("#sideStars").textContent = me.stars;
+  $("#sideUser").innerHTML = `${av(me)}<div><b>${esc(me.name)}</b><small>${esc(me.uni)}</small></div><button class="icon-btn" data-act="logout" aria-label="Log out">${icon("logout")}</button>`;
+  const unread = notifications.filter(n => !n.read).length;
+  $("#bellBadge").innerHTML = unread ? `<span class="badge">${unread}</span>` : "";
+}
+
+/* ===================== 5. SCREENS ===================== */
+const main = $("#main");
+
+/* ---------- Discover ---------- */
+const isPerfect = l => { const u = user(l.userId); return me.want.some(w => same(w, l.title)) && u.wants.some(w => me.teach.some(t => same(w, t))); };
+
+function discover(){
+  const others = listings.filter(l => l.userId !== 0);
+  const matches = others.filter(isPerfect);
+  main.innerHTML = `<div class="view">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">${greeting()}, ${esc(first(me.name))}</p>
+      <h1>What will you <span class="hl">swap</span> today?</h1>
+      <p class="muted">Trade what you know for what you want to learn. ${others.length} offers are pinned to the board right now.</p>
+    </div>
+    <div class="hero-stars"><span>Your balance</span><strong>${icon("star","star-fill")}<b data-count="${me.stars}">0</b></strong><a href="#stars">See history →</a></div>
+  </section>
+  <label class="searchbar">${icon("search")}<span class="sr-only">Search listings</span><input id="q" type="search" placeholder="Search braiding, tailoring, Python, people..." value="${esc(ui.q)}"><kbd class="kbd" aria-hidden="true">/</kbd></label>
+  <div class="chips" id="cats">${CATS.map(c => { const n = c === "All" ? others.length : others.filter(l => l.category === c).length;
+    return `<button class="chip" data-act="cat" data-v="${c}" aria-pressed="${c === ui.cat}">${c}<span class="chip-n">${n}</span></button>`; }).join("")}</div>
+  ${matches.length ? `<section aria-labelledby="mh">
+    <div class="sec-head"><h2 id="mh">Your best matches</h2><span class="pill coral">${icon("star")}${matches.length} perfect swap${matches.length > 1 ? "s" : ""}</span></div>
+    <div class="match-row">${matches.map((l, i) => { const u = user(l.userId); const give = me.teach.find(t => u.wants.some(w => same(w, t)));
+      return `<button class="match" style="--d:${i * 70}ms" data-act="open-listing" data-id="${l.id}">
+        <div class="match-who">${av(u)}<div><b>${esc(u.name)}</b><small>${icon("star","star-fill")} ${u.rating} · ${esc(l.category)}</small></div></div>
+        <div class="swaprow"><div><small>You learn</small><b>${esc(l.title)}</b></div>${icon("swap")}<div><small>You teach</small><b>${esc(give)}</b></div></div>
+      </button>`; }).join("")}</div>
+  </section>` : ""}
+  <section aria-labelledby="bh">
+    <div class="sec-head"><h2 id="bh">On the board</h2>
+      <div class="seg" id="types">${[["all","All"],["skill","Skills"],["service","Services"]].map(([v, t]) => `<button data-act="type" data-v="${v}" aria-pressed="${v === ui.type}">${t}</button>`).join("")}</div>
+      <label class="sort"><span class="sr-only">Sort listings</span><select id="sort">${SORTS.map(([v, t]) => `<option value="${v}" ${v === ui.sort ? "selected" : ""}>${t}</option>`).join("")}</select></label>
+    </div>
+    <p class="result-count" id="resultCount" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </section></div>`;
+  renderGrid();
+  $("#q").addEventListener("input", e => { ui.q = e.target.value; renderGrid(); });
+  $("#sort").addEventListener("change", e => { ui.sort = e.target.value; renderGrid(); });
+}
+
+function score(l){
+  return (isPerfect(l) ? 2 : 0) + (me.want.some(w => same(w, l.title)) ? 1 : 0);
+}
+
+function renderGrid(){
+  const q = norm(ui.q);
+  const list = listings.filter(l => l.userId !== 0
+    && (ui.cat === "All" || l.category === ui.cat)
+    && (ui.type === "all" || l.type === ui.type)
+    && (!q || norm(`${l.title} ${l.desc} ${l.category} ${user(l.userId).name}`).includes(q)));
+  const sorters = {
+    match: (a, b) => score(b) - score(a),
+    new:   (a, b) => b.id - a.id,
+    cheap: (a, b) => a.stars - b.stars,
+    top:   (a, b) => user(b.userId).rating - user(a.userId).rating
+  };
+  list.sort(sorters[ui.sort]);
+  const filtered = ui.q || ui.cat !== "All" || ui.type !== "all";
+  $("#resultCount").innerHTML = filtered
+    ? `${list.length} result${list.length === 1 ? "" : "s"} <button class="link-btn" data-act="clear-filters">Clear filters</button>` : "";
+  $("#grid").innerHTML = list.length ? list.map((l, i) => ticket(l, i)).join("")
+    : `<div class="empty" style="grid-column:1/-1">${icon("search")}<h3>Nothing pinned here yet</h3><p>Try another word or category, or post your own listing.</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" data-act="clear-filters">Clear filters</button><button class="btn btn-gold btn-sm" data-act="add-listing">Post a listing</button></div></div>`;
+}
+
+function ticket(l, i){
+  const u = user(l.userId), perfect = isPerfect(l), wanted = me.want.some(w => same(w, l.title));
+  return `<button class="ticket" style="--c:${esc(u.color)};--d:${Math.min(i, 10) * 45}ms" data-act="open-listing" data-id="${l.id}">
+    <div class="ticket-top"><span class="pill ${l.type === "skill" ? "mint" : "ink"}">${l.type === "skill" ? "Skill" : "Service"}</span><span class="pill ink">${esc(l.category)}</span>
+      ${perfect ? `<span class="pill coral">Perfect swap</span>` : wanted ? `<span class="pill gold">On your wishlist</span>` : ""}</div>
+    <h3>${esc(l.title)}</h3><p>${esc(l.desc)}</p>
+    <div class="ticket-foot">${av(u, "sm")}<div class="who"><b>${esc(u.name)}</b><small>${icon("star","star-fill")}${u.rating}</small></div>
+      <span class="price">${icon("star","star-fill")}${l.stars}<span class="sr-only"> Stars</span></span></div>
+  </button>`;
+}
+
+function openListing(id){
+  const l = listings.find(x => x.id === id), u = user(l.userId);
+  const myServices = listings.filter(x => x.userId === 0 && x.type === "service").map(x => x.title);
+  const offers = [...new Set([...me.teach, ...myServices])];
+  const best = offers.find(t => u.wants.some(w => same(w, t)));
+  const canPay = me.stars >= l.stars;
+  const already = exchanges.some(e => !e.incoming && e.status === "pending" && e.theirs === l.title);
+  openModal(`${sheetHead("Propose a swap")}
+    <div class="detail-box" style="--c:${esc(u.color)}">
+      <div class="ticket-top"><span class="pill ${l.type === "skill" ? "mint" : "ink"}">${l.type === "skill" ? "Skill" : "Service"}</span><span class="pill ink">${esc(l.category)}</span></div>
+      <h3>${esc(l.title)}</h3><p>${esc(l.desc)}</p>
+      <div class="ticket-foot" style="margin-top:12px">${av(u, "sm")}<div class="who"><b>${esc(u.name)}</b><small>${icon("star","star-fill")}${u.rating} · wants ${esc(u.wants.join(", "))}</small></div>
+        <button type="button" class="btn btn-ghost btn-sm" data-act="message-user" data-id="${u.id}">${icon("chat")}Message</button></div>
+    </div>
+    <form data-form="propose" data-id="${l.id}">
+      <p class="group-label">Swap with a skill or service</p>
+      ${offers.length ? offers.map(o => `<label class="opt"><input type="radio" name="offer" value="${esc(o)}" ${o === best ? "checked" : ""}><div><b>${esc(o)}</b><small>${o === best ? `${esc(first(u.name))} wants this. Perfect swap!` : "Offer this in return"}</small></div>${o === best ? `<span class="pill coral">Match</span>` : ""}</label>`).join("")
+        : `<p class="muted" style="font-size:14px;margin-bottom:8px">Add skills on your profile to swap without Stars.</p>`}
+      <p class="group-label">Or pay with Stars</p>
+      <label class="opt"><input type="radio" name="offer" value="__stars" ${!best && canPay ? "checked" : ""} ${canPay ? "" : "disabled"}><div><b>Pay ${l.stars} Stars</b><small>${canPay ? `You have ${me.stars}. You'll have ${me.stars - l.stars} left if accepted.` : `You need ${l.stars - me.stars} more Stars.`}</small></div><span class="price">${icon("star","star-fill")}${l.stars}</span></label>
+      <div class="field" style="margin-top:14px"><label for="pnote">Add a note (optional)</label><textarea class="input" id="pnote" name="note" maxlength="300" placeholder="Hi ${esc(first(u.name))}! I'm free most afternoons."></textarea></div>
+      <p class="err" id="pErr" role="alert"></p>
+      <div class="sheet-foot"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button><button class="btn btn-gold" ${already ? "disabled" : ""}>${icon("send")}${already ? "Already proposed" : "Send proposal"}</button></div>
+    </form>`);
+}
+
+/* ---------- Exchanges ---------- */
+function exchangesView(){
+  const groups = {
+    incoming: exchanges.filter(e => e.incoming && e.status === "pending"),
+    sent:     exchanges.filter(e => !e.incoming && e.status === "pending"),
+    history:  exchanges.filter(e => e.status !== "pending")
+  };
+  const tabs = [["incoming","Incoming"],["sent","Sent"],["history","History"]];
+  const list = groups[ui.exTab];
+  const empties = { incoming:["No requests waiting","When someone wants to swap with you, it shows up here."], sent:["No open proposals","Find something on Discover and propose a swap."], history:["No history yet","Accepted and declined swaps appear here."] };
+  main.innerHTML = `<div class="view">
+    <div class="sec-head"><div class="seg" style="margin-left:0">${tabs.map(([v, t]) => `<button data-act="ex-tab" data-v="${v}" aria-pressed="${v === ui.exTab}">${t} ${groups[v].length ? `(${groups[v].length})` : ""}</button>`).join("")}</div></div>
+    <div class="ex-list">${list.length ? list.map(exCard).join("") : `<div class="empty">${icon("swap")}<h3>${empties[ui.exTab][0]}</h3><p>${empties[ui.exTab][1]}</p>${ui.exTab !== "history" ? `<a class="btn btn-ink btn-sm" style="margin-top:14px" href="#discover">Browse the board</a>` : ""}</div>`}</div>
+  </div>`;
+}
+
+function exCard(e, i){
+  const u = user(e.userId);
+  const status = { pending:["gold","Pending"], accepted:["mint","Accepted"], rejected:["coral","Declined"] }[e.status];
+  const sub = e.incoming ? "wants to swap with you" : e.status === "pending" ? "is reviewing your proposal" : "your proposal";
+  let actions = "";
+  if (e.incoming && e.status === "pending") actions = `<button class="btn btn-coral-ghost btn-sm" data-act="reject" data-id="${e.id}">${icon("x")}Decline</button><button class="btn btn-mint btn-sm" data-act="accept" data-id="${e.id}">${icon("check")}Accept</button>`;
+  else if (e.status === "accepted") actions = `<a class="btn btn-ghost btn-sm" href="#chat/${u.id}">${icon("chat")}Message</a>${e.rated ? `<span class="pill mint">${icon("check")}Reviewed</span>` : `<button class="btn btn-gold btn-sm" data-act="rate" data-id="${e.id}">${icon("star")}Rate ${esc(first(u.name))}</button>`}`;
+  else if (e.status === "pending") actions = `<a class="btn btn-ghost btn-sm" href="#chat/${u.id}">${icon("chat")}Message</a><button class="btn btn-coral-ghost btn-sm" data-act="cancel" data-id="${e.id}">Cancel</button>`;
+  return `<article class="ex" style="--d:${i * 60}ms" id="ex-${e.id}">
+    <div class="ex-head">${av(u)}<div class="who"><b>${esc(u.name)}</b><small>${icon("star","star-fill")} ${u.rating} · ${sub}</small></div><span class="pill ${status[0]}">${status[1]}</span></div>
+    <div class="swaprow"><div><small>${esc(first(u.name))} gives</small><b>${esc(e.theirs)}</b></div>${icon("swap")}<div><small>You give</small><b>${esc(e.mine)}</b></div></div>
+    ${actions ? `<div class="ex-actions">${actions}</div>` : ""}
+  </article>`;
+}
+
+function openRate(id){
+  const e = exchanges.find(x => x.id === id), u = user(e.userId);
+  openModal(`${sheetHead(`Rate ${esc(first(u.name))}`)}
+    <p class="muted" style="margin-bottom:14px">How was <b>${esc(e.theirs)}</b>? Your review helps others swap with confidence, and earns you 1 Star.</p>
+    <form data-form="rate" data-id="${id}">
+      <div class="stars-input" role="radiogroup" aria-label="Rating">${[1,2,3,4,5].map(n => `<button type="button" data-act="pick-star" data-v="${n}" role="radio" aria-checked="false" aria-label="${n} star${n > 1 ? "s" : ""}">${icon("star")}</button>`).join("")}</div>
+      <input type="hidden" name="rating" value="0">
+      <div class="field" style="margin-top:14px"><label for="rtext">Your review</label><textarea class="input" id="rtext" name="text" maxlength="300" placeholder="What went well?"></textarea></div>
+      <p class="err" id="rErr" role="alert"></p>
+      <div class="sheet-foot"><button type="button" class="btn btn-ghost" data-act="close-modal">Later</button><button class="btn btn-gold">Submit review</button></div>
+    </form>`);
+}
+
+/* ---------- Chat ---------- */
+function chat(arg){
+  const id = arg ? +arg : null;
+  main.innerHTML = `<div class="view"><div class="chat ${id ? "has-thread" : ""}"><div class="convos" id="convos" aria-label="Conversations"></div><section class="thread" id="thread"></section></div></div>`;
+  renderConvos(arg); renderThread(arg);
+}
+
+function renderConvos(arg){
+  const id = arg ? +arg : null;
+  const el = $("#convos"); if (!el) return;
+  const ids = Object.keys(messages).map(Number);
+  if (id && !ids.includes(id)) ids.unshift(id);
+  el.innerHTML = ids.length ? ids.map(uid => { const u = user(uid), last = (messages[uid] || []).at(-1);
+    return `<a class="convo" href="#chat/${uid}" ${uid === id ? 'aria-current="true"' : ""}>${av(u)}<div><b>${esc(u.name)}</b><small>${typing[uid] ? "typing..." : last ? (last.from === "me" ? "You: " : "") + esc(last.text) : "Say hello"}</small></div></a>`; }).join("")
+    : `<div class="chat-empty"><p>No conversations yet.</p></div>`;
+}
+
+function renderThread(arg){
+  const id = arg ? +arg : null, el = $("#thread"); if (!el) return;
+  if (!id || !user(id)) { el.innerHTML = `<div class="chat-empty"><div>${icon("chat")}<h3 style="color:var(--ink);margin:8px 0 4px">Pick a conversation</h3><p>Plan your swaps here.</p></div></div>`; return; }
+  const u = user(id), list = messages[id] || [];
+  const draft = $("#msgInput")?.value || "";
+  const hadFocus = document.activeElement?.id === "msgInput";
+  el.innerHTML = `<div class="thread-head"><a href="#chat" class="icon-btn back" aria-label="Back to conversations">${icon("back")}</a>${av(u)}<div><b>${esc(u.name)}</b><small>${typing[id] ? "typing..." : "Online"}</small></div></div>
+    <div class="msgs" id="msgs" aria-live="polite">${list.length ? "" : `<p class="muted" style="text-align:center;margin:auto">Say hi to ${esc(first(u.name))}!</p>`}${list.map(m => `<div class="msg ${m.from}">${esc(m.text)}</div>`).join("")}${typing[id] ? `<div class="msg them typing" aria-label="typing"><i></i><i></i><i></i></div>` : ""}</div>
+    <form class="composer" data-form="msg" data-id="${id}"><label class="sr-only" for="msgInput">Message</label><input class="input" id="msgInput" autocomplete="off" maxlength="500" placeholder="Message ${esc(first(u.name))}..."><button class="btn btn-gold" aria-label="Send">${icon("send")}</button></form>`;
+  const inp = $("#msgInput"); inp.value = draft; if (hadFocus || draft) inp.focus();
+  inp.addEventListener("keydown", e => { if (e.key === "Enter" && (e.nativeEvent?.isComposing || e.isComposing || e.keyCode === 229)) e.preventDefault(); });
+  const box = $("#msgs"); box.scrollTop = box.scrollHeight;
+}
+
+/* ---------- Stars ---------- */
+function stars(){
+  const earned = transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+  const spent = -transactions.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0);
+  const max = Math.max(earned, spent, 1);
+  main.innerHTML = `<div class="view">
+    <div class="stars-top">
+      <div class="bal"><span>Current balance</span><strong>${icon("star","star-fill")}<span data-count="${me.stars}">0</span></strong><span>Stars are your campus credit and your reputation.</span></div>
+      <div class="stat"><span>Total earned</span><strong style="color:var(--mint)">+<span data-count="${earned}">0</span></strong><div class="bar"><i style="background:var(--mint)" data-w="${earned / max * 100}"></i></div></div>
+      <div class="stat"><span>Total spent</span><strong style="color:var(--coral)">-<span data-count="${spent}">0</span></strong><div class="bar"><i style="background:var(--coral)" data-w="${spent / max * 100}"></i></div></div>
+    </div>
+    <div class="two-col">
+      <section class="panel"><h2>History</h2>${transactions.map((t, i) => `<div class="tx" style="--d:${i * 50}ms"><span class="ic" style="background:${t.amount > 0 ? "var(--mint-soft);color:var(--mint)" : "var(--coral-soft);color:var(--coral)"}">${icon(t.amount > 0 ? "up" : "down")}</span><div><b>${esc(t.label)}</b><small>${t.amount > 0 ? "Earned" : "Spent"}</small></div><b class="amt" style="color:${t.amount > 0 ? "var(--mint)" : "var(--coral)"}">${t.amount > 0 ? "+" : ""}${t.amount}</b></div>`).join("")}</section>
+      <section class="panel"><h2>How Stars work</h2>
+        <div class="way"><span class="ic" style="background:var(--mint-soft);color:var(--mint)">${icon("up")}</span><div><b>Teach or help</b><small>Earn Stars when someone pays for your lesson or service.</small></div></div>
+        <div class="way"><span class="ic" style="background:var(--coral-soft);color:var(--coral)">${icon("down")}</span><div><b>Learn or get help</b><small>Spend Stars when you don't have a skill to swap.</small></div></div>
+        <div class="way"><span class="ic" style="background:var(--gold-soft);color:#B07D00">${icon("star")}</span><div><b>Review bonus</b><small>Get 1 Star each time you rate a completed swap.</small></div></div>
+        <a class="btn btn-gold" style="width:100%;margin-top:12px" href="#discover">Find something to learn</a>
+      </section>
+    </div></div>`;
+  requestAnimationFrame(() => requestAnimationFrame(() => main.querySelectorAll("[data-w]").forEach(b => b.style.width = b.dataset.w + "%")));
+}
+
+/* ---------- Profile ---------- */
+function profile(){
+  const mine = listings.filter(l => l.userId === 0);
+  const done = exchanges.filter(e => e.status === "accepted").length;
+  main.innerHTML = `<div class="view">
+    <section class="prof"><div class="prof-cover"></div>
+      <div class="prof-body">${av(me, "lg")}<div class="prof-info"><h2>${esc(me.name)}</h2><p>${esc(me.uni)}${me.email ? " · " + esc(me.email) : ""}</p><p style="margin-top:6px;color:var(--ink)">${esc(me.bio)}</p></div>
+        <button class="btn btn-ghost btn-sm" data-act="edit-profile">${icon("edit")}Edit profile</button></div>
+      <div class="prof-stats"><div><b>${icon("star","star-fill")} ${myRating()}</b><small>${reviews.length} review${reviews.length === 1 ? "" : "s"}</small></div><div><b data-count="${me.stars}">0</b><small>Stars</small></div><div><b>${done}</b><small>Swaps done</small></div><div><b>${mine.length}</b><small>Listings</small></div></div>
+    </section>
+    <div class="prof-grid">
+      <section class="panel"><h2>Skills I can teach</h2>
+        <div class="tags">${me.teach.map((s, i) => `<span class="tag teach">${esc(s)}<button data-act="rm-skill" data-k="teach" data-i="${i}" aria-label="Remove ${esc(s)}">${icon("x")}</button></span>`).join("") || `<p class="muted" style="font-size:14px">Nothing yet.</p>`}</div>
+        <form class="add-row" data-form="skill" data-k="teach"><label class="sr-only" for="addTeach">Add a skill you teach</label><input class="input" id="addTeach" name="v" maxlength="40" placeholder="e.g. Photoshop"><button class="btn btn-ink btn-sm" aria-label="Add skill">${icon("plus")}</button></form>
+      </section>
+      <section class="panel"><h2>Skills I want to learn</h2>
+        <div class="tags">${me.want.map((s, i) => `<span class="tag want">${esc(s)}<button data-act="rm-skill" data-k="want" data-i="${i}" aria-label="Remove ${esc(s)}">${icon("x")}</button></span>`).join("") || `<p class="muted" style="font-size:14px">Nothing yet.</p>`}</div>
+        <form class="add-row" data-form="skill" data-k="want"><label class="sr-only" for="addWant">Add a skill you want</label><input class="input" id="addWant" name="v" maxlength="40" placeholder="e.g. French"><button class="btn btn-ink btn-sm" aria-label="Add skill">${icon("plus")}</button></form>
+      </section>
+      <section class="panel"><div class="panel-head"><h2>My listings and services</h2><button class="btn btn-gold btn-sm" data-act="add-listing">${icon("plus")}Add</button></div>
+        ${mine.length ? mine.map(l => `<div class="mini"><span class="pill ${l.type === "skill" ? "mint" : "ink"}">${l.type === "skill" ? "Skill" : "Service"}</span><div><b>${esc(l.title)}</b><small>${esc(l.category)} · ${l.stars} Stars</small></div><button class="icon-btn" data-act="rm-listing" data-id="${l.id}" aria-label="Delete ${esc(l.title)}">${icon("trash")}</button></div>`).join("") : `<p class="muted" style="font-size:14px">Post a skill or service so others can find you.</p>`}
+      </section>
+      <section class="panel"><h2>Reviews</h2>
+        ${reviews.length ? reviews.map(r => { const u = user(r.userId); return `<div class="review"><div class="review-top">${av(u, "sm")}<b>${esc(u.name)}</b>${rstars(r.rating)}</div><p>${esc(r.text)}</p></div>`; }).join("") : `<p class="muted" style="font-size:14px">Complete swaps to collect reviews.</p>`}
+      </section>
+    </div></div>`;
+}
+
+function openEditProfile(){
+  openModal(`${sheetHead("Edit profile")}
+    <form data-form="profile">
+      <div class="field"><label for="pname">Name</label><input class="input" id="pname" name="name" maxlength="40" value="${esc(me.name)}" required></div>
+      <div class="field"><label for="puni">University</label><input class="input" id="puni" name="uni" maxlength="60" value="${esc(me.uni)}"></div>
+      <div class="field"><label for="pbio">Bio</label><textarea class="input" id="pbio" name="bio" maxlength="200">${esc(me.bio)}</textarea></div>
+      <fieldset class="field" style="border:0"><legend style="font-weight:700;font-size:14px;margin-bottom:8px">Avatar color</legend>
+        <div class="swatches">${COLORS.map(c => `<label><input type="radio" name="color" value="${c}" ${c === me.color ? "checked" : ""} aria-label="Color ${c}"><span style="--c:${c}"></span></label>`).join("")}</div></fieldset>
+      <p class="err" id="eErr" role="alert"></p>
+      <div class="sheet-foot"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button><button class="btn btn-gold">Save changes</button></div>
+    </form>`);
+}
+
+function openAddListing(){
+  openModal(`${sheetHead("New listing")}
+    <form data-form="listing">
+      <p class="group-label" style="margin-top:0">What are you offering?</p>
+      <div class="row2" style="margin-bottom:14px">
+        <label class="opt" style="margin:0"><input type="radio" name="type" value="skill" checked><div><b>A skill</b><small>Something you teach</small></div></label>
+        <label class="opt" style="margin:0"><input type="radio" name="type" value="service"><div><b>A service</b><small>Something you do</small></div></label>
+      </div>
+      <div class="field"><label for="ltitle">Title</label><input class="input" id="ltitle" name="title" maxlength="50" placeholder="e.g. Laptop repair" autofocus></div>
+      <div class="row2">
+        <div class="field"><label for="lcat">Category</label><select class="input" id="lcat" name="category">${CATS.slice(1).map(c => `<option>${c}</option>`).join("")}</select></div>
+        <div class="field"><label for="lstars">Price in Stars</label><input class="input" id="lstars" name="stars" type="number" min="1" max="10" value="2"></div>
+      </div>
+      <div class="field"><label for="ldesc">Description</label><textarea class="input" id="ldesc" name="desc" maxlength="200" placeholder="What will people get?"></textarea></div>
+      <p class="err" id="lErr" role="alert"></p>
+      <div class="sheet-foot"><button type="button" class="btn btn-ghost" data-act="close-modal">Cancel</button><button class="btn btn-gold">${icon("plus")}Pin it to the board</button></div>
+    </form>`);
+}
+
+/* ---------- Notifications ---------- */
+function renderNotifs(){
+  const tones = { coral:"var(--coral-soft);color:var(--coral)", mint:"var(--mint-soft);color:var(--mint)", gold:"var(--gold-soft);color:#B07D00", ink:"#E8E7F5;color:var(--ink)" };
+  $("#notifPanel").innerHTML = `<div class="notif-head"><h3>Notifications</h3><button data-act="notif-read">Mark all read</button></div>
+    <div class="notif-list">${notifications.length ? notifications.map((n, i) => `<button class="notif ${n.read ? "" : "unread"}" data-act="notif-open" data-i="${i}"><span class="ic" style="background:${tones[n.tone]}">${icon(n.icon)}</span><p>${esc(n.text)}<small>${esc(n.time)}</small></p></button>`).join("") : `<p class="muted" style="padding:20px;text-align:center">You're all caught up.</p>`}</div>`;
+}
+function closeNotifs(){ $("#notifPanel").classList.add("hidden"); $("#bellBtn").setAttribute("aria-expanded", "false"); }
+
+/* ===================== 6. EVENTS ===================== */
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-act]");
+  if (!t) { if (!e.target.closest(".notif-wrap")) closeNotifs(); return; }
+  const act = t.dataset.act, id = +t.dataset.id;
+  switch (act){
+    case "cat": ui.cat = t.dataset.v; document.querySelectorAll("#cats .chip").forEach(c => c.setAttribute("aria-pressed", c === t)); renderGrid(); break;
+    case "type": ui.type = t.dataset.v; document.querySelectorAll("#types button").forEach(c => c.setAttribute("aria-pressed", c === t)); renderGrid(); break;
+    case "clear-filters": Object.assign(ui, { q:"", cat:"All", type:"all" }); discover(); $("#q").focus(); break;
+    case "open-listing": openListing(id); break;
+    case "message-user": closeModal(); location.hash = `#chat/${id}`; break;
+    case "close-modal": closeModal(); break;
+    case "ex-tab": ui.exTab = t.dataset.v; exchangesView(); break;
+    case "accept": case "reject": {
+      const card = $(`#ex-${id}`); if (act === "accept") burstFrom(t);
+      answerExchange(id, act === "accept" ? "accepted" : "rejected");
+      const u = user(exchanges.find(x => x.id === id).userId);
+      toast(act === "accept" ? `Swap with ${first(u.name)} accepted!` : `You declined ${first(u.name)}'s request.`);
+      card.classList.add("leaving"); setTimeout(exchangesView, 330); break;
+    }
+    case "cancel": { exchanges = exchanges.filter(x => x.id !== id); toast("Proposal cancelled."); exchangesView(); updateChrome(); break; }
+    case "rate": openRate(id); break;
+    case "pick-star": {
+      const v = +t.dataset.v, form = t.closest("form");
+      form.rating.value = v;
+      form.querySelectorAll("[data-act=pick-star]").forEach(b => { b.classList.toggle("on", +b.dataset.v <= v); b.setAttribute("aria-checked", +b.dataset.v === v); });
+      break;
+    }
+    case "edit-profile": openEditProfile(); break;
+    case "add-listing": openAddListing(); break;
+    case "rm-skill": me[t.dataset.k].splice(+t.dataset.i, 1); profile(); break;
+    case "rm-listing": listings = listings.filter(l => l.id !== id); toast("Listing removed."); profile(); break;
+    case "notif-toggle": {
+      const p = $("#notifPanel"), open = p.classList.contains("hidden");
+      if (open) { renderNotifs(); p.classList.remove("hidden"); } else p.classList.add("hidden");
+      t.setAttribute("aria-expanded", open); break;
+    }
+    case "notif-read": notifications.forEach(n => n.read = true); renderNotifs(); updateChrome(); break;
+    case "notif-open": { const n = notifications[+t.dataset.i]; n.read = true; closeNotifs(); updateChrome(); if (location.hash === n.link) route(); else location.hash = n.link; break; }
+    case "logout": closeModal(); $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); $("#loginForm").reset(); $("#loginErr").textContent = ""; location.hash = ""; break;
+  }
+});
+
+document.addEventListener("submit", e => {
+  const f = e.target.closest("[data-form]"); if (!f) return;
+  e.preventDefault();
+  const kind = f.dataset.form, id = +f.dataset.id, fd = new FormData(f);
+  if (kind === "propose"){
+    const offer = fd.get("offer");
+    if (!offer) { $("#pErr").textContent = "Choose what you'll offer in return."; return; }
+    const ex = proposeExchange(id, offer, String(fd.get("note") || "").trim());
+    burstFrom(f.querySelector("button:not([type=button])"));
+    closeModal(); toast(`Proposal sent to ${first(user(ex.userId).name)}. Waiting for an answer...`);
+    ui.exTab = "sent"; updateChrome();
+  }
+  if (kind === "rate"){
+    const rating = +fd.get("rating"), text = String(fd.get("text") || "").trim();
+    if (!rating) { $("#rErr").textContent = "Tap a star to choose a rating."; return; }
+    const btn = f.querySelector("button:not([type=button])"); burstFrom(btn);
+    addReview(id, rating, text); closeModal(); toast("Thanks for your review! +1 Star"); exchangesView();
+  }
+  if (kind === "msg"){
+    const inp = $("#msgInput"), text = inp.value.trim(); if (!text) return;
+    inp.value = ""; sendMessage(id, text); renderThread(String(id)); renderConvos(String(id)); $("#msgInput").focus();
+  }
+  if (kind === "skill"){
+    const v = String(fd.get("v") || "").trim(), k = f.dataset.k;
+    if (!v) return;
+    if (me[k].some(s => norm(s) === norm(v))) { toast("You already added that."); return; }
+    me[k].push(v); profile(); $(k === "teach" ? "#addTeach" : "#addWant").focus();
+    toast(k === "teach" ? `Added "${v}" to skills you teach.` : `Added "${v}" to your wishlist. Check Discover for matches!`);
+  }
+  if (kind === "profile"){
+    const name = String(fd.get("name")).trim();
+    if (!name) { $("#eErr").textContent = "Your name can't be empty."; return; }
+    Object.assign(me, { name, uni:String(fd.get("uni")).trim(), bio:String(fd.get("bio")).trim(), color:fd.get("color") || me.color });
+    closeModal(); profile(); updateChrome(); toast("Profile updated.");
+  }
+  if (kind === "listing"){
+    const title = String(fd.get("title")).trim(), desc = String(fd.get("desc")).trim(), starsN = Math.round(+fd.get("stars"));
+    if (!title) { $("#lErr").textContent = "Give your listing a title."; return; }
+    if (!(starsN >= 1 && starsN <= 10)) { $("#lErr").textContent = "Price must be between 1 and 10 Stars."; return; }
+    addListing({ type:fd.get("type"), title, category:fd.get("category"), stars:starsN, desc: desc || "Message me for details." });
+    closeModal(); toast(`"${title}" is pinned to the board.`);
+    if (currentRoute().name === "profile") profile(); else location.hash = "#profile";
+  }
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { if (!$("#modal").hidden) closeModal(); else closeNotifs(); }
+  if (e.key === "/" && $("#q") && $("#modal").hidden && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); $("#q").focus(); }
+});
+</script>
+</body>
+</html>
