@@ -31,12 +31,13 @@ def service_list(request):
 
     # POST — create a new listing
     if request.method == "POST":
-        try:
+       try:
             data = json.loads(request.body)
+ 
+            username = data.get("username", "Guest")
+user, created = User.objects.get_or_create(username=username)
 
-            user = User.objects.first()
-
-            if user is None:
+     if user is None:
                 return JsonResponse(
                     {"error": "No user exists in the database."},
                     status=400
@@ -57,12 +58,11 @@ def service_list(request):
                 "category": service.category,
                 "barter_target": service.barter_target,
                 "username": service.user.username,
-            }, status=201)
-
-        except Exception as error:
+            }, status=201)  
+         except Exception as error:                                                                                                                                                                                                                                              
             return JsonResponse(
                 {"error": str(error)},
                 status=400
             )
 
-    return JsonResponse({"error": "Method not allowed"}, status=405)
+            return JsonResponse({"error": "Method not allowed"}, status=405)
