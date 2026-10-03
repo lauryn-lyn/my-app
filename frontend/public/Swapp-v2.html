@@ -636,6 +636,38 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&l
 const ini = n => String(n).split(/\s+/).filter(Boolean).slice(0,2).map(w => w[0]).join("").toUpperCase();
 const first = n => String(n).split(" ")[0];
 const user = id => id === 0 ? { id:0, name:me.name, color:me.color, rating:myRating(), wants:me.want } : users.find(u => u.id === id);
+async function loadDjangoListings() {
+  try {
+  console.log("Django function is running");
+    const response = await fetch("http://127.0.0.1:8000/api/services/");
+
+    if (!response.ok) {
+      throw new Error("Could not load services from Django");
+    }
+
+    const services = await response.json();
+
+    services.forEach(service => {
+  listings.push({
+    id: 1000 + service.id,
+    userId: 1,
+    djangoUsername: service.username,
+    type: "service",
+    category: "Design",
+    title: service.title,
+    stars: 0,
+    desc: service.description
+  });
+});
+
+    renderGrid();
+
+    console.log("Django listings loaded:", services);
+  } catch (error) {
+    console.error("Django API error:", error);
+  }
+}
+
 const icon = (id, cls = "") => `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
 const av = (u, cls = "") => `<span class="av ${cls}" style="--c:${esc(u.color)}" aria-hidden="true">${esc(ini(u.name))}</span>`;
 const norm = s => String(s).toLowerCase().replace(/[^a-z0-9à-ÿ ]/g, " ").replace(/\s+/g, " ").trim();
@@ -801,6 +833,7 @@ function discover(){
     <div class="grid" id="grid"></div>
   </section></div>`;
   renderGrid();
+  loadDjangoListings();
   $("#q").addEventListener("input", e => { ui.q = e.target.value; renderGrid(); });
   $("#sort").addEventListener("change", e => { ui.sort = e.target.value; renderGrid(); });
 }
@@ -831,7 +864,10 @@ function renderGrid(){
 }
 
 function ticket(l, i){
-  const u = user(l.userId), perfect = isPerfect(l), wanted = me.want.some(w => same(w, l.title));
+  const u = user(l.userId);
+if (l.djangoUsername) u.name = l.djangoUsername;
+const perfect = isPerfect(l);
+const wanted = me.want.some(w => same(w, l.title));
   return `<button class="ticket" style="--c:${esc(u.color)};--d:${Math.min(i, 10) * 45}ms" data-act="open-listing" data-id="${l.id}">
     <div class="ticket-top"><span class="pill ${l.type === "skill" ? "mint" : "ink"}">${l.type === "skill" ? "Skill" : "Service"}</span><span class="pill ink">${esc(l.category)}</span>
       ${perfect ? `<span class="pill coral">Perfect swap</span>` : wanted ? `<span class="pill gold">On your wishlist</span>` : ""}</div>
@@ -1076,8 +1112,57 @@ document.addEventListener("click", e => {
   }
 });
 
-document.addEventListener("submit", e => {
+document.addEventListener("submit", async e => {
   const f = e.target.closest("[data-form]"); if (!f) return;
+  if (f.dataset.form === "listing") {
+  e.preventDefault();
+
+  const formData = new FormData(f);
+
+  const listingData = {
+    title: formData.get("title"),
+    description: formData.get("desc"),
+    category: "OFFER",
+    barter_target: "Web design"
+  };
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/services/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(listingData)
+    });
+
+    if (!response.ok) {
+      throw new Error("Could not save listing");
+    }
+
+    const saved = await response.json();
+
+    listings.push({
+      id: 1000 + saved.id,
+      userId: 1,
+      type: formData.get("type") || "service",
+      category: formData.get("category") || "Design",
+      title: saved.title,
+      stars: Number(formData.get("stars")) || 2,
+      desc: saved.description
+    });
+
+    closeModal();
+    renderGrid();
+
+    console.log("Listing saved to Django:", saved);
+
+  } catch (error) {
+    console.error("Could not save listing:", error);
+    alert("Could not save your listing. Please try again.");
+  }
+
+  return;
+}
   e.preventDefault();
   const kind = f.dataset.form, id = +f.dataset.id, fd = new FormData(f);
   if (kind === "propose"){

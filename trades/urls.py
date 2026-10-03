@@ -1,8 +1,6 @@
-from django.contrib import admin
 from django.urls import path
-from trades.views import service_requests_api
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/service-requests/', service_requests_api),
+    path('api/services/', views.service_list, name='service_list'),
 ]
