@@ -1,0 +1,455 @@
+UNDER APP; GLOBAL CSS;
+/* Bring Tailwind into the project so we can use its styling tools */
+@import 'tailwindcss';
+
+/* Bring in extra animation effects */
+@import 'tw-animate-css';
+
+/* Bring in the styles needed for shadcn components */
+@import 'shadcn/tailwind.css';
+
+/* Tell Tailwind how our dark mode should work */
+@custom-variant dark (&:is(.dark *));
+
+/* Start setting up the colors and sizes our app will use */
+@theme inline {
+
+  /* Color used around the sidebar when something is selected/focused */
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Color of the sidebar border */
+  --color-sidebar-border: var(--sidebar-border);
+
+  /* Color of text inside an accented sidebar item */
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+
+  /* Background color of an accented sidebar item */
+  --color-sidebar-accent: var(--sidebar-accent);
+
+  /* Text color for the main sidebar buttons */
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+
+  /* Main color for sidebar buttons */
+  --color-sidebar-primary: var(--sidebar-primary);
+
+  /* Normal text color inside the sidebar */
+  --color-sidebar-foreground: var(--sidebar-foreground);
+
+  /* Main background color of the sidebar */
+  --color-sidebar: var(--sidebar);
+
+  /* Fifth color that can be used in charts */
+  --color-chart-5: var(--chart-5);
+
+  /* Fourth color that can be used in charts */
+  --color-chart-4: var(--chart-4);
+
+  /* Third color that can be used in charts */
+  --color-chart-3: var(--chart-3);
+
+  /* Second color that can be used in charts */
+  --color-chart-2: var(--chart-2);
+
+  /* First color that can be used in charts */
+  --color-chart-1: var(--chart-1);
+
+  /* Color shown around something when it is selected */
+  --color-ring: var(--ring);
+
+  /* Color used for input boxes */
+  --color-input: var(--input);
+
+  /* Color used for borders */
+  --color-border: var(--border);
+
+  /* Color used for things like error or delete actions */
+  --color-destructive: var(--destructive);
+
+  /* Color of text used with an accent */
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* Color used to highlight something */
+  --color-accent: var(--accent);
+
+  /* Color of less important text */
+  --color-muted-foreground: var(--muted-foreground);
+
+  /* Background color for less important elements */
+  --color-muted: var(--muted);
+
+  /* Color of text inside secondary elements */
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Color used for secondary buttons or elements */
+  --color-secondary: var(--secondary);
+
+  /* Color of text inside the main/primary elements */
+  --color-primary-foreground: var(--primary-foreground);
+
+  /* Main color used for important buttons and elements */
+  --color-primary: var(--primary);
+
+  /* Color of text inside pop-up boxes */
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Background color of pop-up boxes */
+  --color-popover: var(--popover);
+
+  /* Color of text inside cards */
+  --color-card-foreground: var(--card-foreground);
+
+  /* Background color of cards */
+  --color-card: var(--card);
+
+  /* Main text color of the website */
+  --color-foreground: var(--foreground);
+
+  /* Main background color of the website */
+  --color-background: var(--background);
+
+  /* Makes small things slightly rounded */
+  --radius-sm: calc(var(--radius) * 0.6);
+
+  /* Makes medium-sized things rounded */
+  --radius-md: calc(var(--radius) * 0.8);
+
+  /* Makes large things rounded */
+  --radius-lg: var(--radius);
+
+  /* Makes extra-large things more rounded */
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  /* Makes very large things even more rounded */
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  /* Makes very large elements strongly rounded */
+  --radius-3xl: calc(var(--radius) * 2.2);
+
+  /* Makes the largest elements the most rounded */
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Set the normal/default appearance of the website */
+:root {
+
+  /* Tell the browser that the normal theme is light */
+  color-scheme: light;
+
+  /* Set the main background of the website to white */
+  --background: oklch(1 0 0);
+
+  /* Set the main text color to dark */
+  --foreground: oklch(0.145 0 0);
+
+  /* Set cards to have a white background */
+  --card: oklch(1 0 0);
+
+  /* Set the text inside cards to dark */
+  --card-foreground: oklch(0.145 0 0);
+
+  /* Set pop-up boxes to have a white background */
+  --popover: oklch(1 0 0);
+
+  /* Set pop-up text to dark */
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* Set the main button color */
+  --primary: oklch(0.205 0 0);
+
+  /* Set the text color used on the main buttons */
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* Set the color for secondary buttons/elements */
+  --secondary: oklch(0.97 0 0);
+
+  /* Set the text color for secondary elements */
+  --secondary-foreground: oklch(0.205 0 0);
+
+  /* Set the background for less important elements */
+  --muted: oklch(0.97 0 0);
+
+  /* Set the color of less important text */
+  --muted-foreground: oklch(0.556 0 0);
+
+  /* Set the color used for highlighted elements */
+  --accent: oklch(0.97 0 0);
+
+  /* Set the text color used on highlighted elements */
+  --accent-foreground: oklch(0.205 0 0);
+
+  /* Set the color used when showing an error or dangerous action */
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* Set the color of borders around things */
+  --border: oklch(0.922 0 0);
+
+  /* Set the color of input box borders */
+  --input: oklch(0.922 0 0);
+
+  /* Set the color shown around something when it is selected */
+  --ring: oklch(0.708 0 0);
+
+  /* Set the first chart color */
+  --chart-1: oklch(0.87 0 0);
+
+  /* Set the second chart color */
+  --chart-2: oklch(0.556 0 0);
+
+  /* Set the third chart color */
+  --chart-3: oklch(0.439 0 0);
+
+  /* Set the fourth chart color */
+  --chart-4: oklch(0.371 0 0);
+
+  /* Set the fifth chart color */
+  --chart-5: oklch(0.269 0 0);
+
+  /* Decide how rounded the corners of things should be */
+  --radius: 0.625rem;
+
+  /* Set the sidebar background */
+  --sidebar: oklch(0.985 0 0);
+
+  /* Set the sidebar text color */
+  --sidebar-foreground: oklch(0.145 0 0);
+
+  /* Set the main sidebar button color */
+  --sidebar-primary: oklch(0.205 0 0);
+
+  /* Set the text color on the main sidebar buttons */
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+
+  /* Set the sidebar highlighted background */
+  --sidebar-accent: oklch(0.97 0 0);
+
+  /* Set the text color on highlighted sidebar items */
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+
+  /* Set the sidebar border color */
+  --sidebar-border: oklch(0.922 0 0);
+
+  /* Set the sidebar focus/selection color */
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* Change the colors when the website is using dark mode */
+.dark {
+
+  /* Tell the browser that dark colors are being used */
+  color-scheme: dark;
+
+  /* Make the website background dark */
+  --background: oklch(0.145 0 0);
+
+  /* Make the main text light */
+  --foreground: oklch(0.985 0 0);
+
+  /* Make cards dark */
+  --card: oklch(0.205 0 0);
+
+  /* Make card text light */
+  --card-foreground: oklch(0.985 0 0);
+
+  /* Make pop-up boxes dark */
+  --popover: oklch(0.205 0 0);
+
+  /* Make pop-up text light */
+  --popover-foreground: oklch(0.985 0 0);
+
+  /* Change the main color for dark mode */
+  --primary: oklch(0.922 0 0);
+
+  /* Change the main button text color */
+  --primary-foreground: oklch(0.205 0 0);
+
+  /* Change secondary elements to dark colors */
+  --secondary: oklch(0.269 0 0);
+
+  /* Make secondary text light */
+  --secondary-foreground: oklch(0.985 0 0);
+
+  /* Make muted elements darker */
+  --muted: oklch(0.269 0 0);
+
+  /* Make muted text lighter */
+  --muted-foreground: oklch(0.708 0 0);
+
+  /* Make highlighted elements dark */
+  --accent: oklch(0.269 0 0);
+
+  /* Make highlighted text light */
+  --accent-foreground: oklch(0.985 0 0);
+
+  /* Set the dark mode error color */
+  --destructive: oklch(0.704 0.191 22.216);
+
+  /* Make borders slightly visible on the dark background */
+  --border: oklch(1 0 0 / 10%);
+
+  /* Make input borders slightly visible */
+  --input: oklch(1 0 0 / 15%);
+
+  /* Set the dark mode selection/focus color */
+  --ring: oklch(0.556 0 0);
+
+  /* Set the first dark mode chart color */
+  --chart-1: oklch(0.87 0 0);
+
+  /* Set the second dark mode chart color */
+  --chart-2: oklch(0.556 0 0);
+
+  /* Set the third dark mode chart color */
+  --chart-3: oklch(0.439 0 0);
+
+  /* Set the fourth dark mode chart color */
+  --chart-4: oklch(0.371 0 0);
+
+  /* Set the fifth dark mode chart color */
+  --chart-5: oklch(0.269 0 0);
+
+  /* Make the sidebar dark */
+  --sidebar: oklch(0.205 0 0);
+
+  /* Make sidebar text light */
+  --sidebar-foreground: oklch(0.985 0 0);
+
+  /* Set the main sidebar color in dark mode */
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+
+  /* Set the text on the main sidebar buttons */
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+
+  /* Set the dark sidebar highlighted color */
+  --sidebar-accent: oklch(0.269 0 0);
+
+  /* Set the text on highlighted sidebar items */
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+
+  /* Make the sidebar border slightly visible */
+  --sidebar-border: oklch(1 0 0 / 10%);
+
+  /* Set the sidebar focus/selection color */
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Check if the user's device is set to dark mode */
+@media (prefers-color-scheme: dark) {
+
+  /* Use dark colors automatically unless the user chose light mode */
+  :root:not(.light) {
+
+    /* Tell the browser to use dark colors */
+    color-scheme: dark;
+
+    /* Make the website background dark */
+    --background: oklch(0.145 0 0);
+
+    /* Make the website text light */
+    --foreground: oklch(0.985 0 0);
+
+    /* Make cards dark */
+    --card: oklch(0.205 0 0);
+
+    /* Make card text light */
+    --card-foreground: oklch(0.985 0 0);
+
+    /* Make pop-up boxes dark */
+    --popover: oklch(0.205 0 0);
+
+    /* Make pop-up text light */
+    --popover-foreground: oklch(0.985 0 0);
+
+    /* Set the primary color for automatic dark mode */
+    --primary: oklch(0.922 0 0);
+
+    /* Set the primary text color */
+    --primary-foreground: oklch(0.205 0 0);
+
+    /* Set the secondary color */
+    --secondary: oklch(0.269 0 0);
+
+    /* Set the secondary text color */
+    --secondary-foreground: oklch(0.985 0 0);
+
+    /* Set the muted background */
+    --muted: oklch(0.269 0 0);
+
+    /* Set the muted text */
+    --muted-foreground: oklch(0.708 0 0);
+
+    /* Set the accent color */
+    --accent: oklch(0.269 0 0);
+
+    /* Set the accent text color */
+    --accent-foreground: oklch(0.985 0 0);
+
+    /* Set the automatic dark mode error color */
+    --destructive: oklch(0.704 0.191 22.216);
+
+    /* Make borders slightly visible */
+    --border: oklch(1 0 0 / 10%);
+
+    /* Make input borders slightly visible */
+    --input: oklch(1 0 0 / 15%);
+
+    /* Set the focus/selection color */
+    --ring: oklch(0.556 0 0);
+
+    /* Set the first chart color */
+    --chart-1: oklch(0.87 0 0);
+
+    /* Set the second chart color */
+    --chart-2: oklch(0.556 0 0);
+
+    /* Set the third chart color */
+    --chart-3: oklch(0.439 0 0);
+
+    /* Set the fourth chart color */
+    --chart-4: oklch(0.371 0 0);
+
+    /* Set the fifth chart color */
+    --chart-5: oklch(0.269 0 0);
+
+    /* Make the sidebar dark */
+    --sidebar: oklch(0.205 0 0);
+
+    /* Make sidebar text light */
+    --sidebar-foreground: oklch(0.985 0 0);
+
+    /* Set the sidebar main color */
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+
+    /* Set the sidebar main text color */
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+
+    /* Set the sidebar highlighted color */
+    --sidebar-accent: oklch(0.269 0 0);
+
+    /* Set the sidebar highlighted text color */
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+
+    /* Make the sidebar border slightly visible */
+    --sidebar-border: oklch(1 0 0 / 10%);
+
+    /* Set the sidebar focus/selection color */
+    --sidebar-ring: oklch(0.556 0 0);
+  }
+}
+
+/* Start the basic styles used across the whole website */
+@layer base {
+
+  /* Select every element on the website */
+  * {
+
+    /* Give everything the correct border and focus styles */
+    @apply border-border outline-ring/50;
+  }
+
+  /* Select the main body of the website */
+  body {
+
+    /* Give the whole page the correct background and text colors */
+    @apply bg-background text-foreground;
+  }
+}
