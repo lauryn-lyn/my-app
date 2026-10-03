@@ -482,7 +482,8 @@ main{padding:8px 32px 48px;flex:1;max-width:1180px;width:100%}
 
 <script>
 /* ===================== 1. FAKE DATA ===================== */
-let me:["Web design basics"], want:["Guitar","Python"] };
+let me = { name:"Amina", email:"", color:"#14B8A6", stars:12, uni:"ICTU", bio:"Second-year CS student. I love clean interfaces and late-night coding.",
+  teach:["Web design basics"], want:["Guitar","Python"] };
 
 let users = [
   { id:1, name:"Kwame Mensah", color:"#FF5C7A", rating:4.9, wants:["Web design"] },
@@ -1119,14 +1120,11 @@ document.addEventListener("submit", async e => {
   const formData = new FormData(f);
 
   const listingData = {
-  title: formData.get("title"),
-  description: formData.get("desc"),
-  category: "OFFER",
-  barter_target: "Web design",
-  username: me.name
-};
-
-  
+    title: formData.get("title"),
+    description: formData.get("desc"),
+    category: "OFFER",
+    barter_target: "Web design"
+  };
 
   try {
     const response = await fetch("https://my-app-1jrs.onrender.com/api/services/", {
