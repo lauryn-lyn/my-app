@@ -132,4 +132,5 @@ MAILERS = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://my-app-mu-blond-30.vercel.app",
 ]
